@@ -195,6 +195,11 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/styleguide/styleguide.html',
   })
+    .when('/map', {
+    //controller: 'MapCtrl',
+    //controllerAs: 'ctrl',
+    templateUrl: 'public/app/features/map/map.html',
+    })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',
     controller: 'ErrorCtrl'
