@@ -7,5 +7,6 @@ define([
   './playlist/all',
   './snapshot/all',
   './panel/all',
+  './map/all',
   './styleguide/styleguide',
 ], function () {});
