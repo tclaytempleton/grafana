@@ -10,5 +10,3 @@ describe('GrafanaApp', () => {
     expect(app).to.not.be(null);
   });
 });
-
-

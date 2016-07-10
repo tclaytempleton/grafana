@@ -16,6 +16,10 @@
 		  <link rel="stylesheet" href="[[.AppSubUrl]]/public/css/grafana.dark.min.css">
 		[[end]]
 
+    <!-- tct   -->
+    <link href='[[.AppSubUrl]]/public/css/leaflet.min.css' rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" /> -->
+
     <link rel="icon" type="image/png" href="[[.AppSubUrl]]/public/img/fav32.png">
 		<base href="[[.AppSubUrl]]/" />
 
@@ -88,9 +92,10 @@
 	<!-- build:js [[.AppSubUrl]]/public/app/boot.js -->
 	<script src="[[.AppSubUrl]]/public/vendor/npm/es6-shim/es6-shim.js"></script>
 	<script src="[[.AppSubUrl]]/public/vendor/npm/systemjs/dist/system.src.js"></script>
-	<script src="[[.AppSubUrl]]/public/app/system.conf.js"></script>
+  <script src="[[.AppSubUrl]]/public/vendor/leaflet/dist/leaflet.js"></script>
+  <script src="[[.AppSubUrl]]/public/app/system.conf.js"></script>
 	<script src="[[.AppSubUrl]]/public/app/boot.js"></script>
-	<!-- endbuild -->
+  <!-- endbuild -->
 
 	[[if .GoogleAnalyticsId]]
 	<script>

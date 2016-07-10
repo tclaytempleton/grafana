@@ -7,6 +7,8 @@ module.exports = function(grunt) {
     'concat:cssDark',
     'concat:cssLight',
     'concat:cssFonts',
+    //tct
+    'concat:cssLeaflet',
     'styleguide',
     'sasslint',
     'postcss'

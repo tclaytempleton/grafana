@@ -27,6 +27,12 @@ module.exports = function(config) {
       dest: '<%= genDir %>/css/fonts.min.css'
     },
 
+    //tct
+    cssLeaflet: {
+      src: [ '<%= genDir %>/vendor/leaflet/dist/leaflet.css' ],
+      dest: '<%= genDir %>/css/leaflet.min.css'
+    },
+
     js: {
       src: [
         '<%= genDir %>/vendor/npm/es6-shim/es6-shim.js',
