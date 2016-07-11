@@ -24,12 +24,12 @@ export function leafletDirective() {
     link: function postLink(scope, element) {
       console.log("linking map controller");
 
-      //var baselayers = {};
-      //var overlays = {};
+      var baselayers = {};
+      var overlays = {};
 
-      //var layerControl = L.control.layers(baselayers, overlays, {position: 'topleft'});
+      var layerControl = L.control.layers(baselayers, overlays, {position: 'topleft'});
       var zoomControl = L.control.zoom({position: 'topright'});
-      //var scaleControl = L.control.scale({position: 'bottomleft'});
+      var scaleControl = L.control.scale({position: 'bottomleft'});
       //var attributionControl = L.control.attribution({position: 'bottomright'});
 
       var img_src = "http://developer.mapquest.com/content/osm/mq_logo.png";
@@ -58,9 +58,9 @@ export function leafletDirective() {
       }).setView(initialPosition, initialZoom);
 
       zoomControl.addTo(map);
-      //scaleControl.addTo(map);
+      scaleControl.addTo(map);
       //attributionControl.addTo(map);
-      //layerControl.addTo(map);
+      layerControl.addTo(map);
       //map.invalidateSize();
 
     }
