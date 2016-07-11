@@ -23,7 +23,15 @@ export function leafletDirective() {
     scope: {},
     link: function postLink(scope, element) {
       console.log("linking map controller");
-//
+
+      //var baselayers = {};
+      //var overlays = {};
+
+      //var layerControl = L.control.layers(baselayers, overlays, {position: 'topleft'});
+      var zoomControl = L.control.zoom({position: 'topright'});
+      //var scaleControl = L.control.scale({position: 'bottomleft'});
+      //var attributionControl = L.control.attribution({position: 'bottomright'});
+
       var img_src = "http://developer.mapquest.com/content/osm/mq_logo.png";
       var mqArial = L.tileLayer(
         'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
@@ -49,6 +57,10 @@ export function leafletDirective() {
         layers: [mqArial] // only add one!
       }).setView(initialPosition, initialZoom);
 
+      zoomControl.addTo(map);
+      //scaleControl.addTo(map);
+      //attributionControl.addTo(map);
+      //layerControl.addTo(map);
       //map.invalidateSize();
 
     }
