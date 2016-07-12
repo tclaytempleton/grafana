@@ -14,6 +14,16 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
   var loadPluginsBundle = new BundleLoader('app/features/plugins/all');
   var loadAdminBundle = new BundleLoader('app/features/admin/admin');
 
+  //var loadDashboard = function ($routeParams) {
+    //return dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug);
+  //};
+
+  //var func = ["dashboardLoaderSrv", "$route", (dashboardLoaderSrv, $route) => {
+  //  console.log("preloading dashboard");
+  //  return dashboardLoaderSrv.loadDashboard($route.current.params.type, $route.current.params.slug);
+  //}];
+
+
   $routeProvider
   .when('/', {
     templateUrl: 'public/app/partials/dashboard.html',
@@ -195,11 +205,19 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/styleguide/styleguide.html',
   })
-    .when('/map', {
-    controller: 'MapCtrl',
-    controllerAs: 'ctrl',
-    templateUrl: 'public/app/features/map/map.html',
-      //resolve: something
+    .when('/map/:type/:slug', {
+      controller: 'LoadMapDashboardCtrl',
+      //controller: 'MapCtrl',
+      controllerAs: 'ctrl',
+      templateUrl: 'public/app/features/map/map.html',
+      //resolve: {
+      //  dashboard: function ($route, dashboardLoaderSrv) {
+      //    var type = $route.current.params.type;
+      //    var slug = $route.current.params.slug;
+      //    return dashboardLoaderSrv.loadDashboard(type, slug);
+      //  }
+      //}
+      //resolve: myDashboardLoader,
     })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',

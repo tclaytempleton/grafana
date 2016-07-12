@@ -155,7 +155,7 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
   data.MainNavLinks = append(data.MainNavLinks, &dtos.NavLink {
     Text: "Map",
     Icon: "fa fa-map-marker",
-    Url: setting.AppSubUrl + "/map",
+    Url: setting.AppSubUrl + "/map/db/dashboard",
   })
 
   if c.IsGrafanaAdmin {

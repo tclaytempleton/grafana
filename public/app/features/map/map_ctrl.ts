@@ -1,15 +1,33 @@
 ///<reference path="../../headers/leaflet.d.ts" />
 ///<reference path="../../headers/common.d.ts" />
 
+
+
 import angular from 'angular';
 import * as L from 'leaflet';
 //
 export class MapCtrl {
-  constructor() {
-  ////constructor(private $scope, private $location) {
-    console.log("in Map Ctrl");
-  }
-}
+  constructor($scope, $routeParams, dashboardSrv, dashboardLoaderSrv) {
+    console.log("MapCtrl");
+    /*
+    $scope.dashboard = dashboard.dashboard;
+    $scope.row = dashboard.dashboard.rows[0];
+    $scope.panel = dashboard.dashboard.rows[0].panels[0];
+    $scope.dashboard.meta = dashboard.meta;
+    var dashboardModel = dashboardSrv.create(dashboard.dashboard, dashboard.meta);
+    var callback = function (panel) {
+      console.log("panel = ");
+      console.log(panel);
+    };
+    dashboardModel.forEachPanel(callback);
+    //console.log("the panel object:\n");
+    //console.log(dashboardModel.rows[0].panels[0]);
+    */
+
+  };
+};
+
+
 
 angular.module('grafana.controllers').controller('MapCtrl', MapCtrl);
 
