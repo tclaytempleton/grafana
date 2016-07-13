@@ -210,6 +210,7 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
       //controller: 'MapCtrl',
       controllerAs: 'ctrl',
       templateUrl: 'public/app/features/map/map.html',
+      reloadOnSearch: false,
       //resolve: {
       //  dashboard: function ($route, dashboardLoaderSrv) {
       //    var type = $route.current.params.type;

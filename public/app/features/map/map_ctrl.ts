@@ -32,38 +32,36 @@ export class MapCtrl {
 angular.module('grafana.controllers').controller('MapCtrl', MapCtrl);
 
 
-export function leafletDirective() {
+export function leafletDirective($compile, $rootScope) {
   return {
     restrict: 'E',
-    controller: MapCtrl,
-    bindToController: true,
-    controllerAs: 'ctrl',
-    scope: {},
+    scope: true,
     link: function postLink(scope, element) {
-      console.log("linking map controller");
+      var seen = [];
+      console.log(JSON.stringify(scope, function(key, val) {
+        if (val != null && typeof val === "object") {
+          if (seen.indexOf(val) >= 0) {
+            return;
+          }
+          seen.push(val);
+        }
+        return val;
+      }));
+      console.log("dashboard");
+      console.log(scope.dashboard);
+
 
       var baselayers = {};
       var overlays = {};
-
       var layerControl = L.control.layers(baselayers, overlays, {position: 'topleft'});
       var zoomControl = L.control.zoom({position: 'topright'});
       var scaleControl = L.control.scale({position: 'bottomleft'});
-      //var attributionControl = L.control.attribution({position: 'bottomright'});
-
-      var img_src = "http://developer.mapquest.com/content/osm/mq_logo.png";
       var mqArial = L.tileLayer(
         'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        ////'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png'
-        //'http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg'
-        //,
-        //{
-        //  attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/">MapQuest</a><img src=' + img_src + '\>',
-        //  subdomains: '1234'
-        //}
       );
       var initialZoom = 6;
       var initialPosition = new L.LatLng(31.5607225, -91.170663);
-      var map = L.map('map', {
+      var map = L.map(element[0], {
         zoomControl: false,
         attributionControl: false,
         inertia: false,
@@ -74,13 +72,35 @@ export function leafletDirective() {
         //click: true,
         layers: [mqArial] // only add one!
       }).setView(initialPosition, initialZoom);
+      var marker = L.marker(initialPosition);
+      var popup = L.popup(
+        {
+          maxWidth: 800,
+          minWidth: 500
+        }
+      );
+      console.log('about to compile new content');
+      //scope.panel = scope.dashboard.rows[0].panels[0];
+      //var template = angular.element('<div>The popup text</div>');
+      scope.panel = scope.dashboard.rows[0].panels[0];
+      scope.row = scope.dashboard.rows[0];
+      scope.dashboard = scope.dashboard;
+      var template = angular.element('<plugin-component type="panel" class="panel-margin">');
+      var linkFn = $compile(template[0]);
+      var content = linkFn(scope);
+      console.log("content: ");
+      console.log(content);
+      popup.setContent(content[0]);
+      //popup.setContent(template[0]);
+      marker.bindPopup(popup);
+      marker.on('popupopen', function (popup) {
+        $rootScope.$broadcast('render');
+      });
+      marker.addTo(map);
 
       zoomControl.addTo(map);
       scaleControl.addTo(map);
-      //attributionControl.addTo(map);
       layerControl.addTo(map);
-      //map.invalidateSize();
-
     }
   };
 }
