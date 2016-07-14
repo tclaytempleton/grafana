@@ -3,11 +3,11 @@ import {ElasticQueryCtrl} from './query_ctrl';
 import {ElasticConfigCtrl} from './config_ctrl';
 
 class ElasticQueryOptionsCtrl {
-  static templateUrl = 'partials/query.options.html';
+  static templateUrl = 'public/app/plugins/datasource/elasticsearch/partials/query.options.html';
 }
 
 class ElasticAnnotationsQueryCtrl {
-  static templateUrl = 'partials/annotations.editor.html';
+  static templateUrl = 'public/app/plugins/datasource/elasticsearch/influxdb/partials/annotations.editor.html';
 }
 
 export {

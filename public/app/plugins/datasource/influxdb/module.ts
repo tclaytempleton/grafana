@@ -2,15 +2,15 @@ import InfluxDatasource from './datasource';
 import {InfluxQueryCtrl} from './query_ctrl';
 
 class InfluxConfigCtrl {
-  static templateUrl = 'partials/config.html';
+  static templateUrl = 'public/app/plugins/datasource/influxdb/partials/config.html';
 }
 
 class InfluxQueryOptionsCtrl {
-  static templateUrl = 'partials/query.options.html';
+  static templateUrl = 'public/app/plugins/datasource/influxdb/partials/query.options.html';
 }
 
 class InfluxAnnotationsQueryCtrl {
-  static templateUrl = 'partials/annotations.editor.html';
+  static templateUrl = 'public/app/plugins/datasource/influxdb/partials/annotations.editor.html';
 }
 
 export {

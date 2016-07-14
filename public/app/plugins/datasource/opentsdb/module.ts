@@ -3,7 +3,7 @@ import {OpenTsQueryCtrl} from './query_ctrl';
 import {OpenTsConfigCtrl} from './config_ctrl';
 
 class AnnotationsQueryCtrl {
-  static templateUrl = 'partials/annotations.editor.html';
+  static templateUrl = 'public/app/plugins/datasource/opentsdb/partials/annotations.editor.html';
 }
 
 export {

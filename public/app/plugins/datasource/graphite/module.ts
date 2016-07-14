@@ -2,15 +2,15 @@ import {GraphiteDatasource} from './datasource';
 import {GraphiteQueryCtrl} from './query_ctrl';
 
 class GraphiteConfigCtrl {
-  static templateUrl = 'partials/config.html';
+  static templateUrl = 'public/app/plugins/datasource/graphite/partials/config.html';
 }
 
 class GraphiteQueryOptionsCtrl {
-  static templateUrl = 'partials/query.options.html';
+  static templateUrl = 'public/app/plugins/datasource/graphite/partials/query.options.html';
 }
 
 class AnnotationsQueryCtrl {
-  static templateUrl = 'partials/annotations.editor.html';
+  static templateUrl = 'public/app/plugins/datasource/graphite/partials/annotations.editor.html';
 }
 
 export {

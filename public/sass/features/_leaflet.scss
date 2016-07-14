@@ -1,4 +1,9 @@
-/* Encompass Custom Leaflet Styles */
+/* Leaflet Styles; inspired, informed, and in some cases identical to Encompass Leaflet styles */
+
+/*overrides the .panel-container setting defined in grafana _dashboard.scss*/
+leaflet-map .panel-container {
+  border: 0px;
+}
 
 /* For embedded maps */
 .leaflet-map {
@@ -88,17 +93,22 @@
   /*color: #fff;*/
 }
 .leaflet-popup-content {
+  /* margin: 0px 0px; /*tct*/
   font-size: 1rem;
   text-align: center;
 }
 .leaflet-popup-content-wrapper {
   border-radius: 0;
-  background-color: #ffffff;
+  background-color: $dark-2;
+  /*background-color: #ffffff tct */;
   /*background-color: rgba(1, 0, 1, 0.9); */
-  border: 1px solid #71B2C9;
+  border: 0px solid #71B2C9; /* 0px tct */
   /*ea2*/
   /*color: #fff;*/
 }
+/*.leaflet-popup-content p {
+  margin: 0px 0;
+} tct */
 .leaflet-popup-tip {
   background-color: #71B2C9; /*ea2*/
 }

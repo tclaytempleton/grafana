@@ -5,7 +5,9 @@
 
 import angular from 'angular';
 import * as L from 'leaflet';
-//
+import $ from 'jquery';
+
+
 export class MapCtrl {
   constructor($scope, $routeParams, dashboardSrv, dashboardLoaderSrv) {
     console.log("MapCtrl");
@@ -37,6 +39,7 @@ export function leafletDirective($compile, $rootScope) {
     restrict: 'E',
     scope: true,
     link: function postLink(scope, element) {
+      /*
       var seen = [];
       console.log(JSON.stringify(scope, function(key, val) {
         if (val != null && typeof val === "object") {
@@ -49,7 +52,7 @@ export function leafletDirective($compile, $rootScope) {
       }));
       console.log("dashboard");
       console.log(scope.dashboard);
-
+      */
 
       var baselayers = {};
       var overlays = {};
@@ -79,24 +82,61 @@ export function leafletDirective($compile, $rootScope) {
           minWidth: 500
         }
       );
-      console.log('about to compile new content');
-      //scope.panel = scope.dashboard.rows[0].panels[0];
-      //var template = angular.element('<div>The popup text</div>');
-      scope.panel = scope.dashboard.rows[0].panels[0];
-      scope.row = scope.dashboard.rows[0];
-      scope.dashboard = scope.dashboard;
-      var template = angular.element('<plugin-component type="panel" class="panel-margin">');
-      var linkFn = $compile(template[0]);
+
+
+      //scope.panel = scope.dashboard.rows[1].panels[1];
+      //scope.row = scope.dashboard.rows[1];
+      //scope.dashboard = scope.dashboard;
+
+      var zero = $('<div></div>');
+      var one   = $('<div ng-repeat="row in dashboard.rows" row-height></div>');
+      var two   = $('<div ng-repeat="panel in row.panels" class="panel" panel-width></div>');
+      var three = $('<plugin-component type="panel" class="panel-margin"></plugin-component>');
+      three.appendTo(two);
+      two.appendTo(one);
+      one.appendTo(zero);
+      //console.log(one);
+
+      var linkFn = $compile(zero[0]);
+      console.log(linkFn);
+
       var content = linkFn(scope);
-      console.log("content: ");
+
       console.log(content);
+
       popup.setContent(content[0]);
-      //popup.setContent(template[0]);
+
       marker.bindPopup(popup);
       marker.on('popupopen', function (popup) {
         $rootScope.$broadcast('render');
       });
       marker.addTo(map);
+
+
+      /*
+      var container = angular.element('<div></div>');
+      scope.panel = scope.dashboard.rows[1].panels[1];
+      scope.row = scope.dashboard.rows[1];
+      scope.dashboard = scope.dashboard;
+      console.log("defined variables");
+      for (var i = 0; i<scope.dashboard.rows.length; i++) {
+        for (var j = 0; j<scope.dashboard.rows[i].panels.length; j++) {
+          var template = angular.element('<plugin-component type="panel" class="panel-margin">');
+          var linkFn = $compile(template[0]);
+          var content = linkFn(scope);
+          console.log("content at step for row = " + i + " panel = " + j + ": "  );
+          console.log(content[0]);
+          container.append(content);
+        }
+      }
+
+      popup.setContent(container[0]);
+      marker.bindPopup(popup);
+      marker.on('popupopen', function (popup) {
+        $rootScope.$broadcast('render');
+      });
+      marker.addTo(map);
+      */
 
       zoomControl.addTo(map);
       scaleControl.addTo(map);

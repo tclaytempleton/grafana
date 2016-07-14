@@ -8,7 +8,7 @@ import queryPart from './query_part';
 import {QueryCtrl} from 'app/plugins/sdk';
 
 export class InfluxQueryCtrl extends QueryCtrl {
-  static templateUrl = 'partials/query.editor.html';
+  static templateUrl = 'public/app/plugins/datasource/influxdb/partials/query.editor.html';
 
   queryModel: InfluxQuery;
   queryBuilder: any;

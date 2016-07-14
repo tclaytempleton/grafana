@@ -4,11 +4,11 @@ import {CloudWatchDatasource} from './datasource';
 import {CloudWatchQueryCtrl} from './query_ctrl';
 
 class CloudWatchConfigCtrl {
-  static templateUrl = 'partials/config.html';
+  static templateUrl = 'public/app/plugins/datasource/cloudwatch/partials/config.html';
 }
 
 class CloudWatchAnnotationsQueryCtrl {
-  static templateUrl = 'partials/annotations.editor.html';
+  static templateUrl = 'public/app/plugins/datasource/cloudwatch/partials/annotations.editor.html';
 }
 
 export {
