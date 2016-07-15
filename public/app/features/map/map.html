@@ -11,15 +11,17 @@
   <!-- panel-width -->
   <!-- row-height -->
   <!-- class="grafana-row" -->
-<!--
+
+  <!--
     <div ng-repeat="row in dashboard.rows" row-height>
-          <div ng-repeat="panel in row.panels" class="panel" panel-width>
+          <div ng-repeat="panel in row.panels | filter:{geolocation:{gis:'F2'}}" class="panel" panel-width>
             <plugin-component type="panel" class="panel-margin">
             </plugin-component>
           </div>
     </div>
 -->
-  <leaflet-map id="map" style="height:100%;width:100%;overflow:visible;position:fixed"></leaflet-map>
+
+<leaflet-map id="map" style="height:100%;width:100%;overflow:visible;position:fixed"></leaflet-map>
 
 
 

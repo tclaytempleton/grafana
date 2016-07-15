@@ -34,7 +34,7 @@ export class MapCtrl {
 angular.module('grafana.controllers').controller('MapCtrl', MapCtrl);
 
 
-export function leafletDirective($compile, $rootScope) {
+export function leafletDirective($compile, $rootScope, $http) {
   return {
     restrict: 'E',
     scope: true,
@@ -75,19 +75,54 @@ export function leafletDirective($compile, $rootScope) {
         //click: true,
         layers: [mqArial] // only add one!
       }).setView(initialPosition, initialZoom);
-      var marker = L.marker(initialPosition);
-      var popup = L.popup(
-        {
-          maxWidth: 800,
-          minWidth: 500
-        }
-      );
+
+
+      var markerLayer = $http.get("http://localhost:8000/sensorlocations/as_layer");
+      markerLayer.success(processMarkerLayer);
+      var markerLayerHandlers = {
+        onEachFeature: markerLayerOnEachFeatureFunction
+      };
+
+      function markerLayerOnEachFeatureFunction (featureData, layer) {
+        var name = featureData.properties.name;
+        console.log(name);
+        var popup = L.popup(
+          {
+            maxWidth: 800,
+            minWidth: 500
+          }
+        );
+        var zero = $('<div></div>');
+        var one   = $('<div ng-repeat="row in dashboard.rows"></div>');
+        var two   = $('<div ng-repeat="panel in row.panels | filter:{geolocation:{gis:\'' + name + '\'}}"></div>');
+        var three = $('<plugin-component type="panel" class="panel-margin"></plugin-component>');
+        three.appendTo(two.appendTo(one.appendTo(zero)));
+        var linkFn = $compile(zero[0]);
+        var content = linkFn(scope);
+        popup.setContent(content[0]);
+        layer.bindPopup(popup);
+        layer.on('popupopen', function (popup) {
+          $rootScope.$broadcast('render');
+        });
+
+      }
+
+      function processMarkerLayer(response) {
+        var layer = L.geoJson(response, markerLayerHandlers);
+        layer.addTo(map);
+
+      }
+
+
+
+      //var marker = L.marker(initialPosition);
 
 
       //scope.panel = scope.dashboard.rows[1].panels[1];
       //scope.row = scope.dashboard.rows[1];
       //scope.dashboard = scope.dashboard;
 
+      /*
       var zero = $('<div></div>');
       var one   = $('<div ng-repeat="row in dashboard.rows" row-height></div>');
       var two   = $('<div ng-repeat="panel in row.panels" class="panel" panel-width></div>');
@@ -103,14 +138,9 @@ export function leafletDirective($compile, $rootScope) {
       var content = linkFn(scope);
 
       console.log(content);
+      */
 
-      popup.setContent(content[0]);
-
-      marker.bindPopup(popup);
-      marker.on('popupopen', function (popup) {
-        $rootScope.$broadcast('render');
-      });
-      marker.addTo(map);
+      //marker.addTo(map);
 
 
       /*

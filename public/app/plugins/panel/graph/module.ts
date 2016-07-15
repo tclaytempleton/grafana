@@ -104,6 +104,9 @@ class GraphCtrl extends MetricsPanelCtrl {
     aliasColors: {},
     // other style overrides
     seriesOverrides: [],
+    geolocation: {
+      gis: null
+    }
   };
 
   /** @ngInject */
@@ -114,6 +117,7 @@ class GraphCtrl extends MetricsPanelCtrl {
     _.defaults(this.panel.tooltip, this.panelDefaults.tooltip);
     _.defaults(this.panel.grid, this.panelDefaults.grid);
     _.defaults(this.panel.legend, this.panelDefaults.legend);
+    _.defaults(this.panel.geolocation, this.panelDefaults.geolocation);
 
     this.colors = $scope.$root.colors;
 
@@ -129,6 +133,7 @@ class GraphCtrl extends MetricsPanelCtrl {
     this.addEditorTab('Axes', 'public/app/plugins/panel/graph/tab_axes.html', 2);
     this.addEditorTab('Legend', 'public/app/plugins/panel/graph/tab_legend.html', 3);
     this.addEditorTab('Display', 'public/app/plugins/panel/graph/tab_display.html', 4);
+    this.addEditorTab('Geolocation', 'public/app/plugins/panel/graph/tab_geolocation.html', 5);
 
     this.logScales = {
       'linear': 1,
