@@ -205,20 +205,17 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     controllerAs: 'ctrl',
     templateUrl: 'public/app/features/styleguide/styleguide.html',
   })
-    .when('/map/:type/:slug', {
+    .when('/map', {
       controller: 'LoadMapDashboardCtrl',
-      //controller: 'MapCtrl',
       controllerAs: 'ctrl',
       templateUrl: 'public/app/features/map/map.html',
       reloadOnSearch: false,
-      //resolve: {
-      //  dashboard: function ($route, dashboardLoaderSrv) {
-      //    var type = $route.current.params.type;
-      //    var slug = $route.current.params.slug;
-      //    return dashboardLoaderSrv.loadDashboard(type, slug);
-      //  }
-      //}
-      //resolve: myDashboardLoader,
+    })
+    .when('/map/:type/:slug', {
+      controller: 'LoadMapDashboardCtrl',
+      controllerAs: 'ctrl',
+      templateUrl: 'public/app/features/map/map.html',
+      reloadOnSearch: false,
     })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',

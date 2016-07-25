@@ -45,6 +45,7 @@ function (coreModule) {
         } else {
           var meta = homeDash.meta;
           meta.canSave = meta.canShare = meta.canStar = false;
+          homeDash.dashboard.title = "GeoViz"; //tct
           $scope.initDashboard(homeDash, $scope);
         }
       });
