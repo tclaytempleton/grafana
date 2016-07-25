@@ -31,6 +31,13 @@
     font-size: 2.5rem;
     text-shadow: 3px 3px 5px black;
   }
+  .icon-gf-dial-gcs_wordmark, .icon-gf-dial_wordmark { //tct
+    color: $link-color;
+    position: relative;
+    top: -4.5rem;
+    font-size: 2.5rem;
+    text-shadow: 3px 3px 5px black;
+  }
 }
 
 .login-inner-box {
@@ -188,6 +195,10 @@
     }
     .icon-gf-grafana_wordmark {
       top: -5px;
+      font-size: 3rem;
+    }
+    .icon-gf-dial-gcs_wordmark, .icon-gf-dial_wordmark {
+      top: 0px;
       font-size: 3rem;
     }
   }
