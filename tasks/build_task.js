@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     'filerev',
     'remapFilerev',
     'usemin',
-    'uglify:genDir'
+    //'uglify:genDir' //this was causing problems --tct
   ]);
 
   // task to add [[.AppSubUrl]] to reved path
