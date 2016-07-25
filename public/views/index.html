@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="theme-color" content="#000">
 
-    <title>Grafana</title>
+    <title>DIAL</title>
 
     <!-- tct   place leaflet css here so styles will be overridden; use cdn so that images are accessible without tweaks-->
     <!--<link href='[[.AppSubUrl]]/public/css/leaflet.min.css' rel='stylesheet' type='text/css'> -->
@@ -19,7 +19,8 @@
 		  <link rel="stylesheet" href="[[.AppSubUrl]]/public/css/grafana.dark.min.css">
 		[[end]]
 
-    <link rel="icon" type="image/png" href="[[.AppSubUrl]]/public/img/fav32.png">
+    <link rel="icon" type="image/svg" href="[[.AppSubUrl]]/public/img/ims_logo.svg">
+    <!-- <link rel="icon" type="image/png" href="[[.AppSubUrl]]/public/img/fav32.png"> -->
 		<base href="[[.AppSubUrl]]/" />
 
 	</head>
@@ -45,7 +46,8 @@
 			<footer class="footer">
 				<div class="row text-center">
 					<ul>
-						<li>
+						<!--
+            <li>
 							<a href="http://docs.grafana.org" target="_blank">
 								<i class="fa fa-file-code-o"></i>
 								Docs
@@ -63,17 +65,20 @@
 								Community
 							</a>
 						</li>
+						-->
 						<li>
-							<a href="http://grafana.org" target="_blank">Grafana</a>
-							<span>v[[.BuildVersion]] (commit: [[.BuildCommit]])</span>
+							<a href="http://grafana.org" target="_blank">DIAL</a>
+							<span>v[[.BuildVersion]] <!--(commit: [[.BuildCommit]])--></span>
 						</li>
-						<li>
+		<!--
+            <li>
 							[[if .NewGrafanaVersionExists]]
 								<a href="http://grafana.org/download" target="_blank" bs-tooltip="'[[.NewGrafanaVersion]]'">
-									New version available!
-								</a>
+								New Version Available!
+                </a>
 							[[end]]
 						</li>
+     -->
 					</ul>
 				</div>
 			</footer>
