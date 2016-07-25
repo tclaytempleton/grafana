@@ -111,6 +111,14 @@ export class GrafanaApp {
     }).catch(function(err) {
       console.log('Application boot failed:', err);
     });
+
+  app.run(function (MapSrv) {
+    MapSrv.setMarkerLayers();
+    MapSrv.setRemoteLayers();
+    MapSrv.setBaseLayers();
+    MapSrv.setLayers();
+  });
+
   }
 }
 
