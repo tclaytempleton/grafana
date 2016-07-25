@@ -1,40 +1,12 @@
 ///<reference path="../../headers/leaflet.d.ts" />
 ///<reference path="../../headers/common.d.ts" />
 
-
-
 import angular from 'angular';
 import * as L from 'leaflet';
 import $ from 'jquery';
 import config from 'app/core/config';
 
-export class MapCtrl {
-  constructor($scope, $routeParams, dashboardSrv, dashboardLoaderSrv) {
-    console.log("MapCtrl");
-    /*
-    $scope.dashboard = dashboard.dashboard;
-    $scope.row = dashboard.dashboard.rows[0];
-    $scope.panel = dashboard.dashboard.rows[0].panels[0];
-    $scope.dashboard.meta = dashboard.meta;
-    var dashboardModel = dashboardSrv.create(dashboard.dashboard, dashboard.meta);
-    var callback = function (panel) {
-      console.log("panel = ");
-      console.log(panel);
-    };
-    dashboardModel.forEachPanel(callback);
-    //console.log("the panel object:\n");
-    //console.log(dashboardModel.rows[0].panels[0]);
-    */
-
-  };
-};
-
-
-
-angular.module('grafana.controllers').controller('MapCtrl', MapCtrl);
-
-
-export function leafletDirective($compile, $rootScope, $http) {
+export function leafletDirective($compile, $rootScope, $http, MapSrv) {
   return {
     restrict: 'E',
     scope: true,
@@ -45,11 +17,11 @@ export function leafletDirective($compile, $rootScope, $http) {
       var layerControl = L.control.layers(baselayers, overlays, {position: 'topleft'});
       var zoomControl = L.control.zoom({position: 'topright'});
       var scaleControl = L.control.scale({position: 'bottomleft'});
-      var mqArial = L.tileLayer(
+      var esri = L.tileLayer(
         'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
       );
       var initialZoom = 6;
-      var initialPosition = new L.LatLng(31.5607225, -91.170663);
+      var initialPosition = new L.LatLng(31.5635497, -91.1403352);
       var map = L.map(element[0], {
         zoomControl: false,
         attributionControl: false,
@@ -58,21 +30,104 @@ export function leafletDirective($compile, $rootScope, $http) {
         dragging: true,
         scrollWheelZoom: true,
         zoomAnimation: true,
-        //click: true,
-        layers: [mqArial] // only add one!
+        layers: [esri] // only add one!
       }).setView(initialPosition, initialZoom);
 
-      //var layersource = "http://localhost:8000/sensorlocations/as_layer"
-      var layersource = "http://129.114.97.166/services/sensorlocations/as_layer";
-      var markerLayer = $http.get(layersource);
+      scope.$on("zoom", function (event, args) {
+        console.log("picked up the event");
+        map.setView(initialPosition, args.zoomlevel,
+          {
+            "animate": true
+          }
+        );
+      });
+
+      var markerLayer = MapSrv.getMarkerLayer();
       markerLayer.success(processMarkerLayer);
-      var markerLayerHandlers = {
-        onEachFeature: markerLayerOnEachFeatureFunction
-      };
+      var baseLayers = MapSrv.getBaseLayers();
+      baseLayers.success(processBaseLayers);
+      var remoteLayers = MapSrv.getRemoteLayers();
+      remoteLayers.success(processRemoteLayers);
+      var layers = MapSrv.getLayers();
+      layers.success(processLayers);
+
+      zoomControl.addTo(map);
+      scaleControl.addTo(map);
+      layerControl.addTo(map);
+
+
+      function processMarkerLayer(response) {
+        var markerLayerHandlers = {
+          onEachFeature: markerLayerOnEachFeatureFunction
+        };
+        var layer = L.geoJson(response, markerLayerHandlers);
+        layer.addTo(map);
+      }
+
+      function processBaseLayers (response) {
+        for (var i = 0; i < response.length; i++) {
+          var name = response[i].name;
+          var url = response[i].url;
+          var attribution = response[i].attribution;
+          var subdomains = response[i].subdomains;
+
+          var baselayer = L.tileLayer(
+            url,
+            {
+              attribution: attribution,
+              subdomains: subdomains
+            }
+          );
+          layerControl.addBaseLayer(baselayer, name);
+        };
+      }
+
+      function processRemoteLayers (response) {
+        for (var i = 0; i < response.length; i++) {
+          var name = response[i].name;
+          var url = response[i].url;
+          var handler_factory_args = {
+            style: {
+              radius: 8,
+              fillColor: "#" + response[i].color,
+              color: "#000",
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.8
+            }
+          };
+          var handler_factories = {
+            style: defaultStyleFactory,
+            pointToLayer: circleMarkerPointToLayerFactory,
+            onEachFeature: simplePopupOnEachFeatureFactory
+          };
+          process_geojson(url, name, handler_factory_args, handler_factories);
+        }
+      }
+
+      function processLayers(response) {
+        for (var i = 0; i < response.length; i++) {
+          var name = response[i].display_name;
+          var url = "http://129.114.97.166/media/" + "geojson/" + response[i].file_name;
+          //var url = "http://localhost:8000/media/" + "geojson/" + response[i].file_name;
+          var handler_factory_args = {
+            style: {
+              fillOpacity: 0.0,
+              color: "#" + response[i].fill_color,
+              weight: '3px'
+            }
+          };
+          var handler_factories = {
+            style: defaultStyleFactory,
+            pointToLayer: circleMarkerPointToLayerFactory,
+            onEachFeature: simplePopupOnEachFeatureFactory
+          };
+          process_geojson(url, name, handler_factory_args, handler_factories);
+        }
+      }
 
       function markerLayerOnEachFeatureFunction (featureData, layer) {
         var name = featureData.properties.name;
-        console.log(name);
         var popup = L.popup(
           {
             maxWidth: 800,
@@ -91,73 +146,63 @@ export function leafletDirective($compile, $rootScope, $http) {
         layer.on('popupopen', function (popup) {
           $rootScope.$broadcast('render');
         });
-
       }
 
-      function processMarkerLayer(response) {
-        var layer = L.geoJson(response, markerLayerHandlers);
-        layer.addTo(map);
+      function process_geojson (url, name, args, handlerFactories) {
+        $http.get(url).success(function successCallback(data) {
+          var handlers = {
+            style: handlerFactories.style(args),
+            pointToLayer: handlerFactories.pointToLayer(args),
+            onEachFeature: handlerFactories.onEachFeature(args)
+          };
+          var geojson = L.geoJson(data, handlers);
+          geojson.addTo(map);
+          overlays[name] = geojson;
+          layerControl.addOverlay(geojson, name);
+        });
+      };
 
-      }
+      function circleMarkerPointToLayerFactory (args) {
+        var circleMarkerHandler = function (feature, latlng) {
+          return L.circleMarker(latlng, args.style);
+        };
+        return circleMarkerHandler;
+      };
 
-
-
-      //var marker = L.marker(initialPosition);
-
-
-      //scope.panel = scope.dashboard.rows[1].panels[1];
-      //scope.row = scope.dashboard.rows[1];
-      //scope.dashboard = scope.dashboard;
-
-      /*
-      var zero = $('<div></div>');
-      var one   = $('<div ng-repeat="row in dashboard.rows" row-height></div>');
-      var two   = $('<div ng-repeat="panel in row.panels" class="panel" panel-width></div>');
-      var three = $('<plugin-component type="panel" class="panel-margin"></plugin-component>');
-      three.appendTo(two);
-      two.appendTo(one);
-      one.appendTo(zero);
-      //console.log(one);
-
-      var linkFn = $compile(zero[0]);
-      console.log(linkFn);
-
-      var content = linkFn(scope);
-
-      console.log(content);
-      */
-
-      //marker.addTo(map);
+      function markerHandlerFactory (args) {
+        var markerHandler = function (feature, latlng) {
+          var options = {
+            title: feature.properties.name
+          };
+          return L.marker(latlng, options);
+        };
+        return markerHandler;
+      };
 
 
-      /*
-      var container = angular.element('<div></div>');
-      scope.panel = scope.dashboard.rows[1].panels[1];
-      scope.row = scope.dashboard.rows[1];
-      scope.dashboard = scope.dashboard;
-      console.log("defined variables");
-      for (var i = 0; i<scope.dashboard.rows.length; i++) {
-        for (var j = 0; j<scope.dashboard.rows[i].panels.length; j++) {
-          var template = angular.element('<plugin-component type="panel" class="panel-margin">');
-          var linkFn = $compile(template[0]);
-          var content = linkFn(scope);
-          console.log("content at step for row = " + i + " panel = " + j + ": "  );
-          console.log(content[0]);
-          container.append(content);
-        }
-      }
+      function defaultStyleFactory (args) {
+        var defaultStyleHandler = function (feature, layer) {
+          return args.style;
+        };
+        return defaultStyleHandler;
+      };
 
-      popup.setContent(container[0]);
-      marker.bindPopup(popup);
-      marker.on('popupopen', function (popup) {
-        $rootScope.$broadcast('render');
-      });
-      marker.addTo(map);
-      */
+      function simplePopupOnEachFeatureFactory (args) {
+        var simplePopup = function (feature, layer) {
+          console.log('simple popup for a feature');
+          if (feature.properties) {
+            var popupString = '<divclass="popup">';
+            for (var k in feature.properties) {
+              var v = feature.properties[k];
+              popupString += k + ': ' + v + '<br />';
+            }
+            popupString += '</div>';
+            layer.bindPopup(popupString);
+          }
+        };
+        return simplePopup;
+      };
 
-      zoomControl.addTo(map);
-      scaleControl.addTo(map);
-      layerControl.addTo(map);
     }
   };
 }

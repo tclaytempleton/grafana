@@ -1,28 +1,36 @@
 <div dash-class ng-if="dashboard">
-  <navbar title="Map" icon="fa fa-map-marker" title-url="map">
-  </navbar>
+  <mapnav></mapnav>
+  <!--<navbar title="Map" icon="fa fa-map-marker" title-url="map/db/dashboard">
+  </navbar> -->
 
-  <!-- ng-controller="RowCtrl" -->
-  <!-- ui-draggable="!dashboard.meta.fullscreen" drag="panel.id"
-               ui-on-drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" -->
+  <!-- <div class="dashboard-container"> -->
 
-  <!-- (row_name, row) -->
-  <!--  track by panel.id -->
-  <!-- panel-width -->
-  <!-- row-height -->
-  <!-- class="grafana-row" -->
+    <!-- <div dash-editor-view></div> -->
+   <dashboard-search></dashboard-search>
+    <!-- <div class="clearfix"></div>-->
 
-  <!--
-    <div ng-repeat="row in dashboard.rows" row-height>
-          <div ng-repeat="panel in row.panels | filter:{geolocation:{gis:'F2'}}" class="panel" panel-width>
-            <plugin-component type="panel" class="panel-margin">
-            </plugin-component>
-          </div>
-    </div>
--->
+ <!-- </div> -->
 
 <leaflet-map id="map" style="height:100%;width:100%;overflow:visible;position:fixed"></leaflet-map>
 
-
-
 </div>
+
+
+<!-- ng-controller="RowCtrl" -->
+<!-- ui-draggable="!dashboard.meta.fullscreen" drag="panel.id"
+             ui-on-drop="onDrop($data, row, panel)" drag-handle-class="drag-handle" -->
+
+<!-- (row_name, row) -->
+<!--  track by panel.id -->
+<!-- panel-width -->
+<!-- row-height -->
+<!-- class="grafana-row" -->
+
+<!--
+  <div ng-repeat="row in dashboard.rows" row-height>
+        <div ng-repeat="panel in row.panels | filter:{geolocation:{gis:'F2'}}" class="panel" panel-width>
+          <plugin-component type="panel" class="panel-margin">
+          </plugin-component>
+        </div>
+  </div>
+-->

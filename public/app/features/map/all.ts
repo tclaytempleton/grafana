@@ -1,1 +1,4 @@
-import './map_ctrl';
+import './mapnav/mapnav';
+import './leaflet_directive';
+import './map_service';
+
