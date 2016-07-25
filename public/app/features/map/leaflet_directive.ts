@@ -6,7 +6,7 @@
 import angular from 'angular';
 import * as L from 'leaflet';
 import $ from 'jquery';
-
+import config from 'app/core/config';
 
 export class MapCtrl {
   constructor($scope, $routeParams, dashboardSrv, dashboardLoaderSrv) {
@@ -39,21 +39,7 @@ export function leafletDirective($compile, $rootScope, $http) {
     restrict: 'E',
     scope: true,
     link: function postLink(scope, element) {
-      /*
-      var seen = [];
-      console.log(JSON.stringify(scope, function(key, val) {
-        if (val != null && typeof val === "object") {
-          if (seen.indexOf(val) >= 0) {
-            return;
-          }
-          seen.push(val);
-        }
-        return val;
-      }));
-      console.log("dashboard");
-      console.log(scope.dashboard);
-      */
-
+      L.Icon.Default.imagePath = config.appSubUrl + "/public/vendor/leaflet/dist/images";
       var baselayers = {};
       var overlays = {};
       var layerControl = L.control.layers(baselayers, overlays, {position: 'topleft'});
@@ -76,8 +62,9 @@ export function leafletDirective($compile, $rootScope, $http) {
         layers: [mqArial] // only add one!
       }).setView(initialPosition, initialZoom);
 
-
-      var markerLayer = $http.get("http://localhost:8000/sensorlocations/as_layer");
+      //var layersource = "http://localhost:8000/sensorlocations/as_layer"
+      var layersource = "http://129.114.97.166/services/sensorlocations/as_layer";
+      var markerLayer = $http.get(layersource);
       markerLayer.success(processMarkerLayer);
       var markerLayerHandlers = {
         onEachFeature: markerLayerOnEachFeatureFunction
