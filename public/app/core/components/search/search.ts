@@ -18,6 +18,7 @@ export class SearchCtrl {
   showImport: boolean;
   dismiss: any;
   ignoreClose: any;
+  guitype: any;
 
   /** @ngInject */
   constructor(private $scope, private $location, private $timeout, private backendSrv, private contextSrv, private $rootScope) {
@@ -89,15 +90,27 @@ export class SearchCtrl {
     this.currentSearchId = this.currentSearchId + 1;
     var localSearchId = this.currentSearchId;
 
+    var path = this.$location.path();//tct; used just below
+    this.guitype = path.split("/")[1];//tct; used just below
+    var guitype = path.split("/")[1];//tct
+    if (!this.guitype) {
+      this.guitype = 'dashboard';
+    }
+
     return this.backendSrv.search(this.query).then((results) => {
       if (localSearchId < this.currentSearchId) { return; }
 
       this.results = _.map(results, function(dash) {
-        dash.url = 'dashboard/' + dash.uri;
+        if (guitype) {
+          dash.url = guitype + "/" + dash.uri;//tct; if in map, link to maps, if in dashboards, link to dashboard
+        } else {
+          dash.url = 'dashboard/' + dash.uri;
+        } //tct; in the case that it's the home dashboard accessed via '/'
+          //dash.url = 'dashboard/' + dash.uri;
         return dash;
       });
 
-      if (this.queryHasNoFilters()) {
+      if (this.queryHasNoFilters() && guitype === "dashboard") { //tct
         this.results.unshift({ title: 'Home', url: config.appSubUrl + '/', type: 'dash-home' });
       }
     });

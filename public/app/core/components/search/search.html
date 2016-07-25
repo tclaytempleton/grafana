@@ -19,7 +19,7 @@
 				<span ng-repeat="tagName in ctrl.query.tag">
 					<a ng-click="ctrl.removeTag(tagName, $event)" tag-color-from-name="tagName" class="label label-tag">
 						<i class="fa fa-remove"></i>
-						{{tagName}}
+             {{tagName}}
 					</a>
 				</span>
 			</span>
@@ -61,7 +61,7 @@
 		</a>
 	</div>
 
-	<div class="search-button-row">
+	<div class="search-button-row" ng-if="ctrl.guitype==='dashboard'">
 		<a class="btn btn-inverse pull-left" href="dashboard/new" ng-show="ctrl.contextSrv.isEditor" ng-click="ctrl.isOpen = false;">
 			<i class="fa fa-plus"></i>
 			Create New
