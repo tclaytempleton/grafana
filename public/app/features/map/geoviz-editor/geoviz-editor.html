@@ -1,0 +1,13 @@
+
+<button class="btn btn-inverse" ng-click="toggleBaselayers()"><i class="fa fa-plus"></i>Base Layers</button><BR>
+<div ng-show="showBaselayers" ng-repeat="baselayer in baselayers">
+  {{baselayer.name}}<BR>
+</div>
+<button class="btn btn-inverse" ng-click="toggleLayers()"><i class="fa fa-plus"></i>Local Layers</button><BR>
+<div ng-show="showLayers" ng-repeat="layer in locallayers">
+  {{layer.display_name}}
+</div>
+  <button class="btn btn-inverse" ng-click="toggleRemotelayers()"><i class="fa fa-plus"></i>Remote Layers</button><BR>
+<div ng-show="showRemotelayers" ng-repeat="remotelayer in remotelayers">
+  {{remotelayer.name}}
+</div>
