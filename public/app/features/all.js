@@ -8,5 +8,6 @@ define([
   './snapshot/all',
   './panel/all',
   './map/all',
+  './pflotran/all',
   './styleguide/styleguide',
 ], function () {});

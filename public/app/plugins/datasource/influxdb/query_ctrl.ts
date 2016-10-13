@@ -14,6 +14,7 @@ export class InfluxQueryCtrl extends QueryCtrl {
   queryBuilder: any;
   groupBySegment: any;
   resultFormats: any[];
+  algorithms: any[];
   policySegment: any;
   tagSegments: any[];
   selectMenu: any;
@@ -32,6 +33,10 @@ export class InfluxQueryCtrl extends QueryCtrl {
     this.resultFormats = [
       {text: 'Time series', value: 'time_series'},
       {text: 'Table', value: 'table'},
+    ];
+    this.algorithms = [
+      {text: 'None', value: 'identity'},
+      {text: 'Changepoint Detection', value: 'changepoint'}
     ];
 
     this.policySegment = uiSegmentSrv.newSegment(this.target.policy);

@@ -11,7 +11,10 @@
     <!-- tct   place leaflet css here so styles will be overridden; use cdn so that images are accessible without tweaks-->
     <!--<link href='[[.AppSubUrl]]/public/css/leaflet.min.css' rel='stylesheet' type='text/css'> -->
     <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
-		<link href='[[.AppSubUrl]]/public/css/fonts.min.css' rel='stylesheet' type='text/css'>
+    <!--for pflotran (and general convenience) but not sure that the namespaces are disjoint: -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+
+    <link href='[[.AppSubUrl]]/public/css/fonts.min.css' rel='stylesheet' type='text/css'>
 
 		[[if .User.LightTheme]]
 		  <link rel="stylesheet" href="[[.AppSubUrl]]/public/css/grafana.light.min.css">
@@ -94,9 +97,10 @@
 	</script>
 
 	<!-- build:js [[.AppSubUrl]]/public/app/boot.js -->
-	<script src="[[.AppSubUrl]]/public/vendor/npm/es6-shim/es6-shim.js"></script>
+  <script src="[[.AppSubUrl]]/public/vendor/npm/es6-shim/es6-shim.js"></script>
 	<script src="[[.AppSubUrl]]/public/vendor/npm/systemjs/dist/system.src.js"></script>
-  <script src="[[.AppSubUrl]]/public/vendor/leaflet/dist/leaflet.js"></script>
+  <!-- <script src="[[.AppSubUrl]]/public/vendor/leaflet/dist/leaflet.js"></script> -->
+  <!--<script src="[[.AppSubUrl]]/public/vendor/ag-grid/dist/ag-grid.js"></script>-->
   <script src="[[.AppSubUrl]]/public/app/system.conf.js"></script>
 	<script src="[[.AppSubUrl]]/public/app/boot.js"></script>
   <!-- endbuild -->

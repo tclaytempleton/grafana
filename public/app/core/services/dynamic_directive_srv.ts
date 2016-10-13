@@ -17,7 +17,15 @@ class DynamicDirectiveSrv {
   }
 
   link(scope, elem, attrs, options) {
+    console.log('in link method of DynamicDirectorSrv');
+    console.log('options.directive looks like this:');
+    console.log(options.directive);
     options.directive(scope).then(directiveInfo => {
+      console.log("what is the nature of this thing returned by the Promise object on the directive property on the " +
+                  "object passed to DynamicDirectiveSrv.create(options), and thence to link?");
+      console.log(directiveInfo);
+      console.log("excellent! It's precicely the directiveFn defind on the editorTab attached to scope!");
+      console.log("how does editorTab get attached to scope? It's passed in to the editorTab");
       if (!directiveInfo || !directiveInfo.fn) {
         elem.empty();
         return;
@@ -36,10 +44,12 @@ class DynamicDirectiveSrv {
   }
 
   create(options) {
+    console.log(options);
     let directiveDef = {
       restrict: 'E',
       scope: options.scope,
       link: (scope, elem, attrs) => {
+        console.log("In link function of directive created by DynamicDirectiveSrv.create()");
         if (options.watchPath) {
           let childScope = null;
           scope.$watch(options.watchPath, () => {
@@ -50,6 +60,7 @@ class DynamicDirectiveSrv {
             this.link(childScope, elem, attrs, options);
           });
         } else {
+          console.log("Else condition is triggerred in DynamicDirectiveSrv; link(scope, elem, attrs, options) will be called");
           this.link(scope, elem, attrs, options);
         }
       }

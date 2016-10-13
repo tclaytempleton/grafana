@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Pflotran Simulation</h1>
+  </div>
+  <div class="panel panel-default" style=width:100%>
+    <div class="panel-body">
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active">
+          <a ng-click="ui('overview')">Overview</a>
+        </li>
+        <li role="presentation">
+          <a ng-click="ui('submission')">Run</a>
+        </li>
+        <li role="presentation">
+          <a ng-click="ui('status')">Job Status</a>
+        </li>
+        <li role="presentation">
+          <a ng-click="ui('visualization')">Visualization</a>
+        </li>
+      </ul>
+    </div>
+    <div id="content" ng-switch="uiState">
+      <div ng-switch-when="submission"><pflotran-submission data="data"></pflotran-submission></div>
+      <div ng-switch-when="overview"><pflotran-overview></pflotran-overview></div>
+      <div ng-switch-when="status"><pflotran-status data="data"></pflotran-status></div>
+      <div ng-switch-when="visualization"><pflotran-visualization></pflotran-visualization></div>
+    </div>
+  </div>
+</div>

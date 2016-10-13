@@ -158,6 +158,12 @@ func setIndexViewData(c *middleware.Context) (*dtos.IndexViewData, error) {
     Url: setting.AppSubUrl + "/map",
   })
 
+  data.MainNavLinks = append(data.MainNavLinks, &dtos.NavLink{
+    Text: "Pflotran",
+    Icon: "fa fa-bolt",
+    Url: setting.AppSubUrl + "/pflotran",
+  })
+
   if c.IsGrafanaAdmin {
 		data.MainNavLinks = append(data.MainNavLinks, &dtos.NavLink{
 			Text: "Admin",

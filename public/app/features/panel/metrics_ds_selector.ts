@@ -90,8 +90,10 @@ export class MetricsDsSelectorCtrl {
     if (datasource) {
       target.datasource = datasource.name;
     }
-
+    console.log(target);
+    console.log(this.panelCtrl.panel.targets);
     this.panelCtrl.panel.targets.push(target);
+    console.log(this.panelCtrl.panel.targets);
   }
 }
 

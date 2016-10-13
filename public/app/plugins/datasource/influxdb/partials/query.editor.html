@@ -97,4 +97,14 @@
 		</div>
 	</div>
 
+  <div class="gf-form-inline">
+    <div class="gf-form">
+      <label class="gf-form-label query-keyword width-7">ALGORITHM</label>
+        <div class="gf-form-select-wrapper">
+          <select type="text" class="gf-form-input" ng-model="ctrl.target.algorithm" ng-options="a.value as a.text for a in ctrl.algorithms" ng-change="ctrl.refresh()"></select>
+        </div>
+      </label>
+    </div>
+  </div>
+
 </query-editor-row>

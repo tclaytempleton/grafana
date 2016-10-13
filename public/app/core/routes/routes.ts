@@ -217,6 +217,21 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
       templateUrl: 'public/app/features/map/map.html',
       reloadOnSearch: false,
     })
+    .when('/pflotran', {
+      //controller: 'PflotranCtrl',
+      //controllerAs: 'ctrl',
+      template: '<pflotran data = "$resolve.data"></pflotran>',
+      resolve: {
+        data: function (jobSrv, backendSrv) {
+          return {
+            "simulation": backendSrv.get('/api/dashboards/db/simulation'),
+            "jobs": jobSrv.getJobs(),
+            "metadata": jobSrv.getMetadata()
+          };
+        }
+      }
+      //templateUrl: 'public/app/features/pflotran/pflotran.html'
+    })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',
     controller: 'ErrorCtrl'

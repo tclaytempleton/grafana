@@ -39,7 +39,7 @@ function (coreModule) {
     $scope.appEvent("dashboard-fetch-start");
 
     if (!$routeParams.slug) {
-      backendSrv.get('/api/dashboards/home').then(function (homeDash) {
+      backendSrv.get('/api/dashboards/home').then(function (homeDash) { //tct changed from 'api/dashboards/home
         if (homeDash.redirectUri) {
           $location.path('dashboard/' + homeDash.redirectUri);
         } else {

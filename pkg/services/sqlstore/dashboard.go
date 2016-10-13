@@ -3,6 +3,7 @@ package sqlstore
 import (
 	"bytes"
 	"fmt"
+  "net/http"
 
 	"github.com/go-xorm/xorm"
 	"github.com/grafana/grafana/pkg/bus"
@@ -63,7 +64,28 @@ func SaveDashboard(cmd *m.SaveDashboardCommand) error {
 			}
 		}
 
-		affectedRows := int64(0)
+
+    fmt.Println("here is the dashboard")
+
+
+    //use the go-simplejson api to grap info from dashboard and call algorithm service if needed
+    //future: could send the entire target to python
+    http_base := "http://localhost:8000/r/"
+    //http_base := "http://129.114.97.166/services/r/"
+    for i, _ := range dash.Data.Get("rows").MustArray() {
+      for j, _ := range dash.Data.Get("rows").GetIndex(i).Get("panels").MustArray() {
+        for k, _ := range dash.Data.Get("rows").GetIndex(i).Get("panels").GetIndex(j).Get("targets").MustArray() {
+          algorithm := dash.Data.Get("rows").GetIndex(i).Get("panels").GetIndex(j).Get("targets").GetIndex(k).Get("algorithm").MustString("None")
+          measurement := dash.Data.Get("rows").GetIndex(i).Get("panels").GetIndex(j).Get("targets").GetIndex(k).Get("measurement").MustString("None")
+          http_string := http_base + algorithm + "/" + measurement + "/"
+          fmt.Println(http_string)
+          resp, err := http.Get(http_string)
+          fmt.Println(resp, err)
+        }
+      }
+    }
+
+    affectedRows := int64(0)
 
 		if dash.Id == 0 {
 			metrics.M_Models_Dashboard_Insert.Inc(1)

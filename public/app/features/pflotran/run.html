@@ -1,0 +1,6 @@
+<div ag-grid="gridOptions" class="ag-fresh" ng-style="{'height':gridHeight}"></div>
+<div class = "run-grid-controls-container">
+  <button class="btn-success run-grid-controls" ng-click="sendJob()">Send Job</button>
+  <button class="btn-success run-grid-controls" ng-click="toggleEditable(true)" ng-show="!gridOptions.context.editable">Edit Job</button>
+  <button class="btn-primary run-grid-controls" ng-click="toggleEditable(false)" ng-show="gridOptions.context.editable">Stop Editing</button>
+</div>

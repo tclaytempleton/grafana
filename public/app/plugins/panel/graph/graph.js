@@ -20,7 +20,7 @@ function (angular, $, moment, _, kbn, GraphTooltip) {
   var module = angular.module('grafana.directives');
   var labelWidthCache = {};
 
-  module.directive('grafanaGraph', function($rootScope, timeSrv) {
+  module.directive('grafanaGraph', function($rootScope, $http, $q, timeSrv) {
     return {
       restrict: 'A',
       template: '<div> </div>',
@@ -166,7 +166,7 @@ function (angular, $, moment, _, kbn, GraphTooltip) {
 
         // Function for rendering panel
         function render_panel() {
-          panelWidth =  elem.width();
+          panelWidth = elem.width();
 
           if (shouldAbortRender()) {
             return;
@@ -180,18 +180,18 @@ function (angular, $, moment, _, kbn, GraphTooltip) {
               draw: [drawHook],
               processOffset: [processOffsetHook],
             },
-            legend: { show: false },
+            legend: {show: false},
             series: {
               stackpercent: panel.stack ? panel.percentage : false,
               stack: panel.percentage ? null : stack,
-              lines:  {
+              lines: {
                 show: panel.lines,
                 zero: false,
                 fill: translateFillOption(panel.fill),
                 lineWidth: panel.linewidth,
                 steps: panel.steppedLine
               },
-              bars:   {
+              bars: {
                 show: panel.bars,
                 fill: 1,
                 barWidth: 1,
@@ -215,7 +215,7 @@ function (angular, $, moment, _, kbn, GraphTooltip) {
               borderWidth: 0,
               hoverable: true,
               color: '#c8c8c8',
-              margin: { left: 0, right: 0 },
+              margin: {left: 0, right: 0},
             },
             selection: {
               mode: "x",
@@ -246,8 +246,69 @@ function (angular, $, moment, _, kbn, GraphTooltip) {
           addAnnotations(options);
           configureAxisOptions(data, options);
 
-          sortedSeries = _.sortBy(data, function(series) { return series.zindex; });
+          //tct
 
+          function serializeParams(params) {
+            if (!params) {
+              return '';
+            }
+            return _.reduce(params, function (memo, value, key) {
+              if (value === null || value === undefined) {
+                return memo;
+              }
+              memo.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+              return memo;
+            }, []).join("&");
+          }
+
+          //function successFunction (data) {
+          //  console.log(data);
+          //}
+
+          var changepoint_promises = [];
+          var the_markings = [];
+          var colors = [];
+          if (panel.hasOwnProperty('targets')) {
+            for (var j = 0; j < data.length; j++) {
+              var target = panel.targets[j];
+              if (target.algorithm === 'changepoint') {
+                var query = "select * from \"" + target.measurement + '-' + target.algorithm + "\"";
+                var http_data = {q: query, epoch: 'ms'};
+                var method = 'GET';
+                var username = "root";
+                var password = "root";
+                var database = "CFU31_R_results";
+                var params = {
+                  u: username,
+                  p: password,
+                  db: database
+                };
+                if (method === 'GET') {
+                  _.extend(params, http_data);
+                  http_data = null;
+                }
+                var url = "/query";
+                //var currentUrl = "http://129.114.97.166/influxdb";
+                var currentUrl = "http://localhost:8086";
+                var http_options = {
+                  method: method,
+                  url: currentUrl + url,
+                  params: params,
+                  data: http_data,
+                  precision: "ms",
+                  inspect: {type: 'influxdb'},
+                  paramSerializer: serializeParams
+                };
+                var promise = $http(http_options);
+                changepoint_promises.push(promise);
+                colors.push(data[j].color);
+              }
+            }
+          }
+
+          sortedSeries = _.sortBy(data, function (series) {
+            return series.zindex;
+          });
           function callPlot(incrementRenderCounter) {
             try {
               $.plot(elem, sortedSeries, options);
@@ -264,14 +325,47 @@ function (angular, $, moment, _, kbn, GraphTooltip) {
             }
           }
 
-          if (shouldDelayDraw(panel)) {
-            // temp fix for legends on the side, need to render twice to get dimensions right
-            callPlot(false);
-            setTimeout(function() { callPlot(true); }, 50);
-            legendSideLastValue = panel.legend.rightSide;
-          }
-          else {
+          function timeoutFunc () {
             callPlot(true);
+          }
+
+          if (changepoint_promises.length > 0) {
+            $q.all(changepoint_promises).then(function (responses) {
+              for (i = 0; i < responses.length ; i++) {
+                var d = responses[i].data.results[0].series[0];
+                for (var m = 0; m < d.values.length; m++) {
+                  the_markings.push({
+                    color: colors[i],
+                    lineWidth: 1,
+                    xaxis: {from: d.values[m][0], to: d.values[m][0]}
+                  });
+                }
+                options.grid.markings = the_markings;
+                if (shouldDelayDraw(panel)) {
+                  // temp fix for legends on the side, need to render twice to get dimensions right
+                  callPlot(false);
+                  setTimeout(timeoutFunc, 50);
+                  legendSideLastValue = panel.legend.rightSide;
+                }
+                else {
+                  callPlot(true);
+                }
+              }
+            });
+          } else {
+            the_markings = [];
+            options.grid.markings = the_markings;
+            if (shouldDelayDraw(panel)) {
+              // temp fix for legends on the side, need to render twice to get dimensions right
+              callPlot(false);
+              setTimeout(function () {
+                callPlot(true);
+              }, 50);
+              legendSideLastValue = panel.legend.rightSide;
+            }
+            else {
+              callPlot(true);
+            }
           }
         }
 

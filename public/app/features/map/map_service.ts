@@ -5,8 +5,8 @@ import angular from 'angular';
 var module = angular.module('grafana.services');
 
 function MapSrv ($http) {
-    var baseURL = "http://129.114.97.166/services/";
-    //var baseURL = "http://localhost:8000/";
+    //var baseURL = "http://129.114.97.166/services/";
+    var baseURL = "http://localhost:8000/";
     var layerURL = baseURL + "layers/";
     var baseLayerURL = baseURL + "baselayers/";
     var remoteLayerURL = baseURL + "remote_layers/";
