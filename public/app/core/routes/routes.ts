@@ -218,9 +218,11 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
       reloadOnSearch: false,
     })
     .when('/pflotran', {
-      //controller: 'PflotranCtrl',
-      //controllerAs: 'ctrl',
       template: '<pflotran data = "$resolve.data"></pflotran>',
+      controller: 'LoadPflotranDashboardCtrl',
+      controllerAs: 'ctrl',
+      cache: false,
+      reloadOnSearch: true,
       resolve: {
         data: function (jobSrv, backendSrv) {
           return {
@@ -230,7 +232,6 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
           };
         }
       }
-      //templateUrl: 'public/app/features/pflotran/pflotran.html'
     })
   .otherwise({
     templateUrl: 'public/app/partials/error.html',

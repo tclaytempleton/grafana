@@ -57,4 +57,28 @@ function (coreModule) {
 
   });
 
+  coreModule.default.controller('LoadPflotranDashboardCtrl', function ($scope, $routeParams, dashboardLoaderSrv, backendSrv, $location) {
+    $scope.appEvent("dashboard-fetch-start");
+
+    if (!$routeParams.slug) {
+      backendSrv.get('/api/dashboards/db/simulation').then(function (simDash) { //tct changed from 'api/dashboards/home
+        console.log("simDash");
+        console.log(simDash);
+        if (simDash.redirectUri) {
+          $location.path('dashboard/' + simDash.redirectUri);
+        } else {
+          var meta = simDash.meta;
+          meta.canSave = meta.canShare = meta.canStar = false;
+          simDash.dashboard.title = "Pflotran Simulation"; //tct
+          $scope.initDashboard(simDash, $scope);
+        }
+      });
+      return;
+    }
+    dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug).then(function (result) {
+      $scope.initDashboard(result, $scope);
+    });
+
+  });
+
 });

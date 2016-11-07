@@ -5,3 +5,4 @@ import './JobSrv';
 import './config';
 import './status';
 import './visualization';
+import './pflotrannav/pflotrannav';

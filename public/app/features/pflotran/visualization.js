@@ -17,12 +17,8 @@ define ([
       };
     });
 
-    module.controller('PflotranVisualizationController', function ($scope) {
-      console.log("test controller PflotranVisualizationController");
-      $scope.test = "some test text on the scope";
-      console.log("dashboard test in visualization; is initDashboard here?");
-      console.log($scope.initDashboard);
-      $scope.initDashboard($scope.data.simulation.$$state.value, $scope);
+    module.controller('PflotranVisualizationController', function () {
+      console.log("in PflotranVisualizationController");
     });
 
   });

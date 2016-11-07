@@ -18,12 +18,10 @@ define ([
     });
 
     module.controller('PflotranCtrl', function ($scope) {
-        console.log("scope.initDashboard");
-        console.log($scope.initDashboard);
+        console.log($scope);
         $scope.data = $scope.$resolve.data;
+        console.log($scope);
         $scope.uiState = "overview";
-        console.log("here should be the simulation dashboard");
-        console.log($scope.data.simulation);
 
         $scope.ui = function (state) {
           switch(state) {
