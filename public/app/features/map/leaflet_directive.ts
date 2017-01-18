@@ -109,8 +109,8 @@ export function leafletDirective($compile, $rootScope, $http, MapSrv) {
       function processLayers(response) {
         for (var i = 0; i < response.length; i++) {
           var name = response[i].display_name;
-          //var url = "http://129.114.97.166/media/" + "geojson/" + response[i].file_name;
-          var url = "http://localhost:8000/media/" + "geojson/" + response[i].file_name;
+          var url = "http://129.114.111.79/media/" + "geojson/" + response[i].file_name;
+          //var url = "http://localhost:8000/media/" + "geojson/" + response[i].file_name;
           var handler_factory_args = {
             style: {
               fillOpacity: 0.0,
